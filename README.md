@@ -5,7 +5,7 @@
 - Клонировать репозиторий
 
 ```js
-git clone https://github.com/harryheman/Socket.io-React-Chat-App.git
+git clone https://github.com/unformer/chat.git
 ```
 
 - Установить общие зависимости, а также зависимости сервера и клиента
