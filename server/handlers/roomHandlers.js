@@ -23,11 +23,15 @@ module.exports = (io, socket) => {
   // обновление списка online пользователей в конкретной комнате
   const updateOnlineList = room => {
     Room.find({ roomId: room.roomId }).then(rooms => {
-      if (rooms[0] && rooms[0].onlineUsers.filter(u => u.userId === room.userId).length === 0) {
-        rooms[0].onlineUsers.push({ userId: room.userId, userName: room.userName })
-        rooms[0].save().then(() => {
-          getRoomOnlineUsers()
-        })
+      try {
+        if (rooms[0].onlineUsers.filter(u => u.userId === room.userId).length === 0) {
+          rooms[0].onlineUsers.push({ userId: room.userId, userName: room.userName })
+          rooms[0].save().then(() => {
+            getRoomOnlineUsers()
+          })
+        }
+      } catch (error) {
+        
       }
     })
   }
@@ -35,12 +39,17 @@ module.exports = (io, socket) => {
   // обновление списка online пользователей в конкретной комнате
   const userleave = room => {
     Room.find({ roomId: room.roomId }).then(rooms => {
-      if (rooms[0].onlineUsers.filter(u => u.userId === room.userId).length > 0) {
-        rooms[0].onlineUsers.splice(rooms[0].onlineUsers.findIndex(u => u.userId === room.userId), 1)
-        rooms[0].save().then(() => {
-          getRoomOnlineUsers()
-        })
+      try {
+        if (rooms && rooms[0].onlineUsers.filter(u => u.userId === room.userId).length > 0) {
+          rooms[0].onlineUsers.splice(rooms[0].onlineUsers.findIndex(u => u.userId === room.userId), 1)
+          rooms[0].save().then(() => {
+            getRoomOnlineUsers()
+          })
+        }
+      } catch (error) {
+        
       }
+
     })
   }
 
