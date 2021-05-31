@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
 // styles
 import { ListGroup } from 'react-bootstrap'
+import s from './MessageList.module.css'
 // components
 import { MessageListItem } from './MessageListItem'
 
@@ -24,6 +25,7 @@ export const MessageList = ({ messages, removeMessage }) => {
   return (
     <>
       <ListGroup variant='flush' style={listStyles}>
+      <div id="video-grid" className={s.streamBlock}></div>
         {messages.map((msg) => (
           <MessageListItem
             key={msg._id}

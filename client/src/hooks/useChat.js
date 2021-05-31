@@ -6,7 +6,7 @@ const SERVER_URL = 'http://localhost:5000'
 
 export const useChat = (roomId, inviteLink) => {
   const [onlineUsers, setOnlineUsers] = useState([])
-  const [messages, setMessages] = useState([])  
+  const [messages, setMessages] = useState([])
   const [currentUserId] = useState(window.localStorage.getItem('userId'))
   const [currentUserName] = useState(window.localStorage.getItem('userName'))
 
@@ -20,14 +20,14 @@ export const useChat = (roomId, inviteLink) => {
     window.localStorage.setItem('inviteLink', inviteLink)
 
     // делаем запрос на обновление списка пользователей в конкретной комнате
-    currentUserName && socketRef.current.emit('room:updateOnlineList', { roomId: inviteLink, userId: currentUserId, userName: currentUserName})
+    currentUserName && socketRef.current.emit('room:updateOnlineList', { roomId: inviteLink, userId: currentUserId, userName: currentUserName })
 
     // получаем online пользователей и сетаем их username    
     socketRef.current.emit('room:getRoomOnlineUsers')
     socketRef.current.on('onlineUsers', (room) => {
-      const online = room[0].onlineUsers.map( u => u.userName)
+      const online = room[0].onlineUsers.map(u => u.userName)
       setOnlineUsers(online)
-    })    
+    })
 
     // делаем запрос на получение сообщений
     socketRef.current.emit('message:get')
@@ -35,10 +35,10 @@ export const useChat = (roomId, inviteLink) => {
     // получаем сообщения и сетаем их
     socketRef.current.on('messages', (messages) => {
       const newMessages = messages.map((m) =>
-        m.userId === currentUserId ? { ...m, msg: {...m.msg, currentUser: true} } : m
+        m.userId === currentUserId ? { ...m, msg: { ...m.msg, currentUser: true } } : m
       )
       setMessages(newMessages)
-    })    
+    })  
 
     return () => {
       socketRef.current.disconnect()
@@ -51,7 +51,7 @@ export const useChat = (roomId, inviteLink) => {
       roomId,
       userId,
       messageId,
-      msg: {        
+      msg: {
         messageText,
         userName,
         date
@@ -65,7 +65,7 @@ export const useChat = (roomId, inviteLink) => {
 
   const userLeave = () => {
     socketRef.current.emit('room:userleave', { roomId: roomId, userId: currentUserId })
-  }
+  }  
 
   return { onlineUsers, messages, currentUserName, sendMessage, removeMessage, userLeave }
 }

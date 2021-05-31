@@ -15,7 +15,14 @@ export const useHome = (userId) => {
 
         // проверяем создание пользователя и сетаем true
         socketRef.current.on('userCreated', (user) => {
-            user.userId && setNewUserCreated(true)
+            //если комната создана
+            socketRef.current.on('roomCreated', (room) => {
+                user.userId && setNewUserCreated(true)
+            })
+            //если комната обновлена
+            socketRef.current.on('roomUpdated', (room) => {
+                user.userId && setNewUserCreated(true)
+            })
         })
 
         return () => {
@@ -34,15 +41,15 @@ export const useHome = (userId) => {
                 // делаем запросы на создание пользователя, комнаты и обновления списка online
                 socketRef.current.emit('user:add', { userId, userName, roomId })
                 socketRef.current.emit('room:updateOnlineList', { roomId, userId, userName })
-                socketRef.current.emit('room:add', { roomId, onlineUsers: [{ userId: userId, userName: userName }] })    
-                
+                socketRef.current.emit('room:add', { roomId, onlineUsers: [{ userId: userId, userName: userName }] })
+
                 // записываем в локальыне данные созданного пользователя
                 window.localStorage.setItem('userId', userId)
                 window.localStorage.setItem('userName', userName)
-                window.localStorage.setItem('roomId', roomId)     
-                
+                window.localStorage.setItem('roomId', roomId)
+
                 // удаляем гостевую ссылку
-                window.localStorage.removeItem('inviteLink')                
+                window.localStorage.removeItem('inviteLink')
             } else {
                 alert('Username: "' + userName + '" is buzy, try another...')
             }

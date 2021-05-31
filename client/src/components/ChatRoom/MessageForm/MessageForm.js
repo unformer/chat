@@ -2,13 +2,19 @@ import { useState } from 'react'
 // styles
 import { Form, Button } from 'react-bootstrap'
 // icons
-import { FiSend } from 'react-icons/fi'
+import { FiSend, FiVideo, FiVideoOff } from 'react-icons/fi'
 
-export const MessageForm = ({ userName, sendMessage }) => {
+export const MessageForm = ({ userName, sendMessage, startStopVideo }) => {
   const [text, setText] = useState('')
+  const [videoStatus, setVideoStatus] = useState(false)
 
   const handleChangeText = (e) => {
     setText(e.target.value)
+  }
+
+  const streamHandler = () => {
+    startStopVideo(videoStatus)
+    !videoStatus ? setVideoStatus(true) : setVideoStatus(false)
   }
 
   const handleSendMessage = (e) => {
@@ -24,6 +30,9 @@ export const MessageForm = ({ userName, sendMessage }) => {
     <>
       <Form onSubmit={handleSendMessage}>
         <Form.Group className='d-flex'>
+          <Button variant='primary' onClick={streamHandler}>
+            {!videoStatus ? <FiVideo /> : <FiVideoOff />}
+          </Button>
           <Form.Control
             value={text}
             onChange={handleChangeText}

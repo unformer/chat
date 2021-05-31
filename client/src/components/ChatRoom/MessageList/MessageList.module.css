@@ -1,0 +1,11 @@
+.streamBlock {
+    display:flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.streamBlock video {
+    width:300px;    
+    padding:20px;
+    box-sizing: border-box;
+}

@@ -27,6 +27,7 @@ module.exports = (io, socket) => {
         if (rooms[0].onlineUsers.filter(u => u.userId === room.userId).length === 0) {
           rooms[0].onlineUsers.push({ userId: room.userId, userName: room.userName })
           rooms[0].save().then(() => {
+            io.emit('roomUpdated', room)
             getRoomOnlineUsers()
           })
         }
